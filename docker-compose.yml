@@ -1,0 +1,43 @@
+services:
+  nginx1:
+    image: nginx:latest
+    container_name: nginx1
+    volumes:
+      - ./default1.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      app_network:
+        ipv4_address: 172.18.0.2
+
+  nginx2:
+    image: nginx:latest
+    container_name: nginx2
+    volumes:
+      - ./default2.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      app_network:
+        ipv4_address: 172.18.0.3
+
+  nginx3:
+    image: nginx:latest
+    container_name: nginx3
+    volumes:
+      - ./default3.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      app_network:
+        ipv4_address: 172.18.0.4
+
+  app:
+    build: app/
+    command: python ./server.py
+    container_name: app
+    networks:
+      app_network:
+        ipv4_address: 172.18.0.5
+
+networks:
+  app_network:
+    driver: bridge
+    name: app_network
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16 
